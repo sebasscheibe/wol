@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+    <!--
+    SPDX-FileCopyrightText: Sebastian Scheibe <sebascheibe@gmail.com>
+    SPDX-License-Identifier: CC0-1.0
+    -->
+    <id>wol</id>
+    <name>W O L</name>
+    <summary>Wake-on-LAN app to start devices in local subnet of nextcloud instance</summary>
+    <description><![CDATA[The application allows the user to wake up local devices with wake-on-LAN via a magic packet. The corresponding devices must support wake-on-LAN (WOL) and have it activated. In addition, the user needs to know the MAC addresses of the managed devices.
+
+In the device list, one can see whether the devices are already running or whether they are inactive (sleep mode or switched off).
+
+With the app, you can remotely start your PC via Nextcloud to connect to it from the Internet (e.g. via RDP). This only works if the devices run in the same subnet as the Nextcloud instance.]]></description>
+    <version>0.0.1</version>
+    <licence>agpl</licence>
+    <author mail="sebascheibe@gmail.com" >Sebastian Scheibe</author>
+    <namespace>WOL</namespace>
+    <category>tools</category>
+    <bugs>https://github.com/sebasscheibe/wol/issues</bugs>
+    <dependencies>
+        <nextcloud min-version="27" max-version="27"/>
+    </dependencies>
+    <navigations>
+        <navigation>
+            <name>W O L</name>
+            <route>wol.page.index</route>
+        </navigation>
+    </navigations>
+</info>
