@@ -55,7 +55,7 @@ class DeviceService {
 	public function create(string $title, string $mac, string $userId): Device {
 		$device = new Device();
 		$device->setTitle($title);
-		$device->setMAC($mac);
+		$device->setMac($mac);
 		$device->setUserId($userId);
 		return $this->mapper->insert($device);
 	}
@@ -64,7 +64,7 @@ class DeviceService {
 		try {
 			$device = $this->mapper->find($id, $userId);
 			$device->setTitle($title);
-			$device->setMAC($mac);
+			$device->setMac($mac);
 			return $this->mapper->update($device);
 		} catch (Exception $e) {
 			$this->handleException($e);

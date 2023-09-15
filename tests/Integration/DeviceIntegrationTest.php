@@ -40,7 +40,7 @@ class DeviceIntegrationTest extends TestCase {
 		// create a new device that should be updated
 		$device = new Device();
 		$device->setTitle('old_title');
-		$device->setMAC('old_mac');
+		$device->setMac('old_mac');
 		$device->setUserId($this->userId);
 
 		$id = $this->mapper->insert($device)->getId();
@@ -50,7 +50,7 @@ class DeviceIntegrationTest extends TestCase {
 			'id' => $id,
 			'user_id' => $this->userId
 		]);
-		$updatedDevice->setMAC('mac');
+		$updatedDevice->setMac('mac');
 		$updatedDevice->setTitle('title');
 
 		$result = $this->controller->update($id, 'title', 'mac');

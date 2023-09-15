@@ -13,8 +13,8 @@ use OCP\AppFramework\Db\Entity;
  * @method getId(): int
  * @method getTitle(): string
  * @method setTitle(string $title): void
- * @method getMAC(): string
- * @method setMAC(string $mac): void
+ * @method getMac(): string
+ * @method setMac(string $mac): void
  * @method getUserId(): string
  * @method setUserId(string $userId): void
  */
@@ -27,7 +27,7 @@ class Device extends Entity implements JsonSerializable {
 		return [
 			'id' => $this->id,
 			'title' => $this->title,
-			'content' => $this->content
+			'mac' => $this->mac
 		];
 	}
 }

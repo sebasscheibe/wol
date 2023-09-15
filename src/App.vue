@@ -40,7 +40,7 @@
 					v-model="currentDevice.title"
 					type="text"
 					:disabled="updating">
-				<textarea ref="content" v-model="currentDevice.content" :disabled="updating" />
+				<textarea ref="mac" v-model="currentDevice.mac" :disabled="updating" />
 				<input type="button"
 					class="primary"
 					:value="t('wol', 'Save')"
@@ -121,7 +121,7 @@ export default {
 
 	methods: {
 		/**
-		 * Create a new device and focus the device content field automatically
+		 * Create a new device and focus the device mac field automatically
 		 * @param {Object} device Device object
 		 */
 		openDevice(device) {
@@ -130,7 +130,7 @@ export default {
 			}
 			this.currentDeviceId = device.id
 			this.$nextTick(() => {
-				this.$refs.content.focus()
+				this.$refs.mac.focus()
 			})
 		},
 		/**
@@ -145,7 +145,7 @@ export default {
 			}
 		},
 		/**
-		 * Create a new device and focus the device content field automatically
+		 * Create a new device and focus the device mac field automatically
 		 * The device is not yet saved, therefore an id of -1 is used until it
 		 * has been persisted in the backend
 		 */
@@ -155,7 +155,7 @@ export default {
 				this.devices.push({
 					id: -1,
 					title: '',
-					content: '',
+					mac: '',
 				})
 				this.$nextTick(() => {
 					this.$refs.title.focus()

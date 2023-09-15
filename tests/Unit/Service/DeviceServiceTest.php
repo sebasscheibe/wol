@@ -41,7 +41,7 @@ class DeviceServiceTest extends TestCase {
 		// the device when updated
 		$updatedDevice = Device::fromRow(['id' => 3]);
 		$updatedDevice->setTitle('title');
-		$updatedDevice->setMAC('mac');
+		$updatedDevice->setMac('mac');
 		$this->mapper->expects($this->once())
 			->method('update')
 			->with($this->equalTo($updatedDevice))
