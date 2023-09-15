@@ -34,7 +34,7 @@
 				</AppNavigationItem>
 			</ul>
 		</AppNavigation>
-		<AppMAC>
+		<AppContent>
 			<div v-if="currentDevice">
 				<input ref="title"
 					v-model="currentDevice.title"
@@ -52,13 +52,13 @@
 				<h2>{{
 				 t('wol', 'Create a device to get started') }}</h2>
 			</div>
-		</AppMAC>
+		</AppContent>
 	</div>
 </template>
 
 <script>
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import AppMAC from '@nextcloud/vue/dist/Components/AppMAC'
+import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationNew from '@nextcloud/vue/dist/Components/AppNavigationNew'
@@ -72,7 +72,7 @@ export default {
 	name: 'App',
 	components: {
 		ActionButton,
-		AppMAC,
+		AppContent,
 		AppNavigation,
 		AppNavigationItem,
 		AppNavigationNew,
