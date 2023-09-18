@@ -13,6 +13,8 @@ use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCA\WOL\Db\Device;
 use OCA\WOL\Db\DeviceMapper;
 
+require_once __DIR__.'/WakeOnLAN.php';
+
 class DeviceService {
 	private DeviceMapper $mapper;
 
@@ -41,6 +43,8 @@ class DeviceService {
 
 	public function find(int $id, string $userId): Device {
 		try {
+			$device = $this->mapper->find($id, $userId);
+			//WakeOnLAN::wakeUp($device->getMac(), '192.168.0.255');
 			return $this->mapper->find($id, $userId);
 
 			// in order to be able to plug in different storage backends like files
@@ -76,6 +80,16 @@ class DeviceService {
 			$device = $this->mapper->find($id, $userId);
 			$this->mapper->delete($device);
 			return $device;
+		} catch (Exception $e) {
+			$this->handleException($e);
+		}
+	}
+
+	public function wake(int $id, string $userId): Device {
+		try {
+			$device = $this->mapper->find($id, $userId);
+			WakeOnLAN::wakeUp($device->getMac(), '192.168.0.255');
+			return $this->mapper->update($device);
 		} catch (Exception $e) {
 			$this->handleException($e);
 		}

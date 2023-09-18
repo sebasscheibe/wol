@@ -1,34 +1,24 @@
 <template>
-    <!--
+	<!--
     SPDX-FileCopyrightText: Sebastian Scheibe <sebascheibe@gmail.com>
     SPDX-License-Identifier: AGPL-3.0-or-later
     -->
 	<div id="content" class="app-wol">
 		<AppNavigation>
-			<AppNavigationNew v-if="!loading"
-				:text="t('wol', 'New device')"
-				:disabled="false"
-				button-id="new-wol-button"
-				button-class="icon-add"
-				@click="newDevice" />
+			<AppNavigationNew v-if="!loading" :text="t('wol', 'New device')" :disabled="false" button-id="new-wol-button"
+				button-class="icon-add" @click="newDevice" />
 			<ul>
-				<AppNavigationItem v-for="device in devices"
-					:key="device.id"
+				<AppNavigationItem v-for="device in devices" :key="device.id"
 					:title="device.title ? device.title : t('wol', 'New device')"
-					:class="{active: currentDeviceId === device.id}"
-					@click="openDevice(device)">
+					:class="{ active: currentDeviceId === device.id }" @click="openDevice(device)">
 					<template slot="actions">
-						<ActionButton v-if="device.id === -1"
-							icon="icon-close"
-							@click="cancelNewDevice(device)">
+						<ActionButton v-if="device.id === -1" icon="icon-close" @click="cancelNewDevice(device)">
 							{{
-							t('wol', 'Cancel device creation') }}
+								t('wol', 'Cancel device creation') }}
 						</ActionButton>
-						<ActionButton v-else
-							icon="icon-delete"
-							@click="deleteDevice(device)">
+						<ActionButton v-else icon="icon-delete" @click="deleteDevice(device)">
 							{{
-							 t('wol', 'Delete device') }}
+								t('wol', 'Delete device') }}
 						</ActionButton>
 					</template>
 				</AppNavigationItem>
@@ -36,21 +26,17 @@
 		</AppNavigation>
 		<AppContent>
 			<div v-if="currentDevice">
-				<input ref="title"
-					v-model="currentDevice.title"
-					type="text"
-					:disabled="updating">
+				<input ref="title" v-model="currentDevice.title" type="text" :disabled="updating">
 				<textarea ref="mac" v-model="currentDevice.mac" :disabled="updating" />
-				<input type="button"
-					class="primary"
-					:value="t('wol', 'Save')"
-					:disabled="updating || !savePossible"
+				<input type="button" class="primary" :value="t('wol', 'Save')" :disabled="updating || !savePossible"
 					@click="saveDevice">
+				<input type="button" class="primary" :value="t('wol', 'Wake up')" :disabled="updating || !savePossible"
+					@click="wakeDevice">
 			</div>
 			<div v-else id="emptycontent">
 				<div class="icon-file" />
 				<h2>{{
-				 t('wol', 'Create a device to get started') }}</h2>
+					t('wol', 'Create a device to get started') }}</h2>
 			</div>
 		</AppContent>
 	</div>
@@ -82,6 +68,7 @@ export default {
 			devices: [],
 			currentDeviceId: null,
 			updating: false,
+			wakingUp: false,
 			loading: true,
 		}
 	},
@@ -114,7 +101,7 @@ export default {
 			this.devices = response.data
 		} catch (e) {
 			console.error(e)
-			showError(t('devicestutorial', 'Could not fetch devices'))
+			showError(t('devices', 'Could not fetch devices'))
 		}
 		this.loading = false
 	},
@@ -143,6 +130,14 @@ export default {
 			} else {
 				this.updateDevice(this.currentDevice)
 			}
+		},
+		/**
+		 * Action tiggered when clicking the wake up button
+		 * TODO: disable button for timeout to avoid double clicking
+		 */
+		wakeDevice() {
+			this.wakeUpDevice(this.currentDevice)
+
 		},
 		/**
 		 * Create a new device and focus the device mac field automatically
@@ -182,7 +177,7 @@ export default {
 				this.currentDeviceId = response.data.id
 			} catch (e) {
 				console.error(e)
-				showError(t('devicestutorial', 'Could not create the device'))
+				showError(t('devices', 'Could not create the device'))
 			}
 			this.updating = false
 		},
@@ -196,17 +191,32 @@ export default {
 				await axios.put(generateUrl(`/apps/wol/devices/${device.id}`), device)
 			} catch (e) {
 				console.error(e)
-				showError(t('devicestutorial', 'Could not update the device'))
+				showError(t('devices', 'Could not update the device'))
 			}
 			this.updating = false
 		},
 		/**
-		 * Delete a device, remove it from the frontend and show a hint
+		 * wakeUp device using its MAC address to send a magic packet to
 		 * @param {Object} device Device object
 		 */
+		async wakeUpDevice(device) {
+			this.wakingUp = true
+			try {
+				//TODO: send magic packet
+				await axios.post(generateUrl(`/apps/wol/wake/${device.id}`), device)
+			} catch (e) {
+				console.error(e)
+				showError(t('device', 'Could not wake up the device'))
+			}
+			this.updating = false
+		},
+		/**
+	 * Delete a device, remove it from the frontend and show a hint
+	 * @param {Object} device Device object
+	 */
 		async deleteDevice(device) {
 			try {
-				await axios.delete(generateUrl(`/apps/wol/devices/${device.id}`))
+				axios.delete(generateUrl(`/apps/wol/devices/${device.id}`))
 				this.devices.splice(this.devices.indexOf(device), 1)
 				if (this.currentDeviceId === device.id) {
 					this.currentDeviceId = null
@@ -221,21 +231,21 @@ export default {
 }
 </script>
 <style scoped>
-	#app-content > div {
-		width: 100%;
-		height: 100%;
-		padding: 20px;
-		display: flex;
-		flex-direction: column;
-		flex-grow: 1;
-	}
+#app-content>div {
+	width: 100%;
+	height: 100%;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
 
-	input[type='text'] {
-		width: 100%;
-	}
+input[type='text'] {
+	width: 100%;
+}
 
-	textarea {
-		flex-grow: 1;
-		width: 100%;
-	}
+textarea {
+	flex-grow: 1;
+	width: 100%;
+}
 </style>

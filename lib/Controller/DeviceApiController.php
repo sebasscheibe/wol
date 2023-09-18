@@ -72,6 +72,17 @@ class DeviceApiController extends ApiController {
 	 * @NoCSRFRequired
 	 * @NoAdminRequired
 	 */
+	public function wake(int $id): DataResponse {
+		return $this->handleNotFound(function () use ($id) {
+			return $this->service->wake($id, $this->userId);
+		});
+	}
+
+	/**
+	 * @CORS
+	 * @NoCSRFRequired
+	 * @NoAdminRequired
+	 */
 	public function destroy(int $id): DataResponse {
 		return $this->handleNotFound(function () use ($id) {
 			return $this->service->delete($id, $this->userId);

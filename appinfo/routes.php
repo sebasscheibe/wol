@@ -14,11 +14,12 @@ declare(strict_types=1);
 return [
 	'resources' => [
 		'device' => ['url' => '/devices'],
-		'device_api' => ['url' => '/api/0.1/devices']
+		'device_api' => ['url' => '/api/0.1/devices'],
 	],
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'device_api#preflighted_cors', 'url' => '/api/0.1/{path}',
-			'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']]
+			'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
+		['name' => 'device#wake', 'url' => '/wake/{path}', 'verb' => 'POST'],
 	]
 ];
